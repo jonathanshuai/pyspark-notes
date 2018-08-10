@@ -148,7 +148,16 @@ sqlCtx.sql("SELECT * FROM people").explain()
 #######################
 
 
-# There's a driver program, 
+# There's a driver program, and it wakes up these worker nodes which are close to the data
+# and will perform some task (delegated by driver program)
+
+# Transformations
+# map, flatmap, filter, distinct, sample, union, intersection, subtract, cartesian
+
+# Actions
+# collect, count, take, takeOrdered, reduce, aggregate, foreach
+
+
 
 
 

@@ -130,7 +130,7 @@ sales_fields = [
 ]
 
 sales_schema = StructType(sales_fields)
-sales = sqlCtx.createDataFrame(sales_rdd, sales_schema)
+sales = sqlCtx.createDataFrame(sales_rdd, sales_schema) # Create dataframe from rdd
 
 sqlCtx.registerDataFrameAsTable(sales, "sales") # another way to add DataFrame to our SQLContext tables
 
@@ -158,10 +158,47 @@ sqlCtx.sql("SELECT * FROM people").explain()
 # collect, count, take, takeOrdered, reduce, aggregate, foreach
 
 
+from pyspark.sql import SQLContext
+from pyspark.sql.types import *
+
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import VectorAssembler
+
+df = sqlCtx.read.csv('./data/churn.all')
+
+numeric_cols
+
+# Get DataFrame from SQL
+df_adult = spark.table("adult")
+
+result = spark.sql(
+    """
+    SELECT
+        *
+    FROM
+        adult
+    """)
+
+df_adult.printSchema() # Look at the df schema
+
+from pyspark.sql.functions import when, col, mean, desc, round
+
+df_result = df_adult.select(
+    df_adult['occupation']
+    when( col('marital_status') == ' Divorced', 1).otherwise(0).alias('is_divorced')
+)
+
+result.show()
 
 
-
-
-
-
-
+# DataFrame syntax SQL
+df_result = df_adult.select(
+  df_adult['education_num'].alias('education'),
+  when( df_adult['marital_status'] == ' Never-married', 1).otherwise(0).alias('bachelor')
+)
+df_result = df_result.groupBy('education').agg(
+  round(mean('bachelor'), 2).alias('bachelor_rate'),
+  round(mean('bachelor'), 2).alias('bachelor_rate2') 
+)
+df_result = df_result.orderBy(desc('bachelor_rate'))
+df_result.show(1)
